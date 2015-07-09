@@ -103,6 +103,38 @@ Note that APNS does not support sending payloads that exceed 2048 bytes (increas
 The message is only one part of the payload, if
 once constructed the payload exceeds the maximum size, an APNSDataOverflow exception will be raised before anything is sent.
 
+Examples
+~~~~~~~~~~~~~~~~~~~~~~
+
+Here are a few examples of the `send_message` API and results in both platforms.
+
+1. :code:`device.send_message(message="This is a message")`
+	- iOS
+	.. image:: https://cloud.githubusercontent.com/assets/2005930/8601458/d4b193b6-2631-11e5-8ba8-b5bca08812f4.PNG
+	- Android: 
+	.. image:: https://cloud.githubusercontent.com/assets/2005930/8601609/af2e7d88-2632-11e5-94f1-25b24114c653.png
+2. :code:`device.send_message(message='This is a message', title='This is a title')`
+	- Not valid!. E.g :code:`TypeError: gcm_send_message() got an unexpected keyword argument 'title'`
+3. :code:`device.send_message(message='This is a message', extra={'title': 'This is a title'})`
+	- iOS: Same as (1)
+	- Android:
+	.. image:: https://cloud.githubusercontent.com/assets/2005930/8601598/962948d6-2632-11e5-9fb8-0bcefcc0900d.png
+
+4. :code:`device.send_message(message=None, extra={'title': 'This is a title', message:'This is a message'})`
+	- iOS: Received silently.
+	- Android: Same as (3)
+
+5. :code:`device.send_message(message='This is a message with a badge', extra={'title': 'This is a title'}, badge=1)`
+	- iOS:
+	.. image:: https://cloud.githubusercontent.com/assets/2005930/8601504/0c0551c2-2632-11e5-9b88-f899836faa76.PNG
+	- Android: Exception
+6. :code:`device.send_message(message='This is a message with a badge', extra={'title': 'This is a title'}, badge=True)`
+	- iOS: same as 5. (badge will  be set to 1)
+	- Android: Exception. :code:`TypeError: gcm_send_message() got an unexpected keyword argument 'badge'`
+
+7. To send a custom field: 
+	- :code:`device.send_message(message='This is a message with a badge', extra={'title': 'This is a title', 'data': {'custom-field':'mumbo-jumbo'}})`
+
 
 Sending messages in bulk
 ------------------------
